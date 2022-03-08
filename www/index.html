@@ -6,63 +6,306 @@
   <script src="components/loader.js"></script>
   <link rel="stylesheet" href="components/loader.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/claymorphism-css/dist/clay.css"/>
   <script src="js/ncmb-latest.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/cssua.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
 </head>
 <body>
 
   <!-- ログインページ -->
   <div data-role="page" id="LoginPage">
-    <header data-role="header" data-position="fixed" data-theme="c">
-      <h1>猫の体重管理APP</h1>
+    <header>
+      <p id="appTiele">Pet体重管理</p>
     </header>
       <section data-role="content">
-      <h1>ログイン</h1>
-      ユーザー名
+      <p class="constLogin" id="constWord_Login">ログイン</p>
+      <p class="constLogin">ユーザー名</p>
         <input type="text" id="login_username">
-      パスワード
+      <p class="constLogin">パスワード</p>
         <input type="password" id="login_password">
-      新規登録？
-        <a href="#RegisterPage" data-role="button" data-mini="true" data-inline="true" data-theme="b">登録</a>
-        <a href="#" id="LoginBtn" data-role="button" data-inline="false" data-theme="b">ログインする</a>
+        <p id="loginZone"><a href="#" id="LoginBtn">ログイン</a></p>
+        <p id="signUpZone"><a href="#RegisterPage" id="signUpBtn">新規登録</a></p>
+        
       </section>
   </div>
 
   <!-- 登録ページ -->
   <div data-role="page" id="RegisterPage">
-    <header data-role="header" data-position="fixed" data-theme="c">
-      <h1>アプリデモ</h1>
+    <header>
+      <p id="appTiele_Register">Pet体重管理</p>
     </header>
-      <section data-role="content">
-      <h1>新規登録</h1>
-      ユーザー名
+      <section data-role="content" id="registerSection">
+      <p id="constWord_SignUp">登録情報</p>
+      <p class="constRegister">ユーザー名</p>
         <input type="text" id="reg_username">
-      パスワード
+      <p class="constRegister">パスワード</p>
         <input type="password" id="reg_password">
-        <a href="#" id="RegisterBtn" data-role="button" data-inline="false" data-theme="b">登録する</a>
-        <a href="#LoginPage" data-role="button" data-mini="true" data-inline="true" data-theme="b">戻る</a>
+      <p class="registerPageBtns"><a href="#" id="RegisterBtn">新規登録する</a></p>
+      <p class="registerPageBtns"><a href="#LoginPage" id="returnPageBtn">戻る</a></p>
       </section>
   </div>
 
   <!-- 詳細ページ -->
   <div data-role="page" id="DetailPage">
-    <header data-role="header" data-position="fixed" data-theme="c">
-      <h1>猫の体重管理</h1>
-      <a href="#yesNoDialog_logout" class="ui-btn-left" data-rel="popup" data-position-to="window" data-role="button" data-inline="false" data-theme="b">ログアウト</a>
-    </header>
-    <section data-role="content">
+    <!-- <header data-role="header" data-position="fixed" data-theme="d"> -->
+    <!-- <header class="mainScreenTitle">
+      <h2>タイトル</h2>
+      <!-- <a href="#yesNoDialog_logout" class="ui-btn-right" data-rel="popup" data-position-to="window" data-role="button" data-inline="false" data-theme="d" ログアウト</a> -->
+      <!-- <a class="logoutBtn" id="YesBtn_logout">Logout</a> -->
+    <!-- </header> -->
+    <section data-role="content"id="mainScreen">
+     <section  class="diplayScreen GraphMemo">
       <!--Detail show-->
-      <div data-role="content" id="detailArea">ようこそ！ログイン成功しました！</div>
-      <div><a href="#" id="drawMyChart">グラフを表示する</a></div>
+      <!--<div data-role="content" id="detailArea">ようこそ！ログイン成功しました！</div>-->
+      <div class="titleName btnGraphDisplay" id="drawMyChart">体重グラフ</div>
+      <!--グラフ表示ゾーンのスペース確保-->
+      <div class="btnMotals" id="graphReloadBtn">更新</div>
+      <div class="tapGraphZorn" id="tapDisplayGraph">タップしてグラフを表示する</div>
       <!--ここのcanvasにグラフ表示したい-->
-      <canvas id="myChart" width="400" height="200"></canvas>
+      <div class="canvasDrawZone">
+        <canvas class="hide--display" id="myChart"></canvas>
+      </div>
       
       <!--DBやり取り確認用-->
-      <div id="hereWrite">ここに表示したいよね</div>
-      <div id="hereShow">ここに取得したデータ表示したいよね</div>
+      <div id="hereWrite">ここに取得した件数表示</div>
+      <div id="hereShow">ここに取得したデータのなにか表示</div>
+
+
+
+      <div class="titleName" id="memoZoneTitle">メモ管理</div>
+      <!--画面下半分にメモゾーン-->
+      <div class="wrapper">
+          <div class="nav">
+              <div class="navDiv navTitle_0" id="memoPetName_0">名前１</div>
+              <div class="navDiv navTitle_1" id="memoPetName_1">名前２</div>
+          </div>
+          <dl class="contents"> 
+            <dt id="memoF">
+              <dl>
+                <dt class="titleMemoDate" id="memodate_0_0">日付</dt>
+                <dd id="memofield_0_0">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,0)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_0">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_1">日付</dt>
+                <dd id="memofield_0_1">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,1)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_1">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_2">日付</dt>
+                <dd id="memofield_0_2">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,2)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_2">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_3">日付</dt>
+                <dd id="memofield_0_3">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,3)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_3">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_4">日付</dt>
+                <dd id="memofield_0_4">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,4)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_4">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_5">日付</dt>
+                <dd id="memofield_0_5">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,5)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_5">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_6">日付</dt>
+                <dd id="memofield_0_6">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,6)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_6">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_7">日付</dt>
+                <dd id="memofield_0_7">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,7)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_7">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_8">日付</dt>
+                <dd id="memofield_0_8">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,8)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_8">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_0_9">日付</dt>
+                <dd id="memofield_0_9">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(0,9)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_0_9">DBのobjId</dd>
+              </dl>
+            </dt>
+            <dt class="is-hidden" id="memoF">
+              <dl>
+                <dt class="titleMemoDate" id="memodate_1_0">日付</dt>
+                <dd id="memofield_1_0">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,0)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_0">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_1">日付</dt>
+                <dd id="memofield_1_1">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,1)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_1">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_2">日付</dt>
+                <dd id="memofield_1_2">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,2)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_2">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_3">日付</dt>
+                <dd id="memofield_1_3">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,3)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_3">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_4">日付</dt>
+                <dd id="memofield_1_4">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,4)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_4">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_5">日付</dt>
+                <dd id="memofield_1_5">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,5)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_5">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_6">日付</dt>
+                <dd id="memofield_1_6">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,6)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_6">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_7">日付</dt>
+                <dd id="memofield_1_7">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,7)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_7">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_8">日付</dt>
+                <dd id="memofield_1_8">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,8)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_8">DBのobjId</dd>
+
+                <dt class="titleMemoDate" id="memodate_1_9">日付</dt>
+                <dd id="memofield_1_9">メモの内容が入ります。</dd>
+                <dd><a class="button--middle" onclick="startEditBtnJs(1,9)" id="startEditBtn">編集</a></dd>
+                <dd class="hide--objid" id="objId_1_9">DBのobjId</dd>
+              </dl>
+            </dt>
+          </dl>
+      </div>
+
+      <div class="hide--objid" id="debugObjId">テスト表示</div>
+
+
+      <!--モーダルウィンドウdebug-->
+      <div id="maskMotal" class="hidden"></div>
+      <section id="modalMotal" class="hidden">
+        <dt id="modalMotal_p_01">ここに日付いれよう</dt>
+        <dt class="hide--objid" id="chooseObjId">DBのobjId</dt>
+        <dt id="constWord">前回のメモ</dt>
+        <dd id="modalMotal_p_02">閉じるのボタンをおしたらウィンドが閉じます。</dd>
+        <textarea rows="20" cols="200" maxlength="200" id="modalMotal_p_03" placeholder="200文字以内で入力してください"></textarea>
+        <div class="btnMotals" id="sendMotal">
+          保存
+        </div>
+        <div class="btnMotals" id="closeMotal">×</div>
+      </section>
+    </section>
+    
+    <section class="hide--Screen ProfileMyPage" id="myPageScreen">
+    <div class="titleName" id="profileTitle">プロフィール</div>
+    <div class="btnMotals" id="profileReloadBtn">更新</div>
+        <div class="profileCards3">
+        <div class="card3">
+            <div class="box3">
+                <!-- <img src="sample.jpg" class="image3"> -->
+                <div>
+                    <p class="title3" id="petName_0">名前１</p>
+                    <ul class="content3">
+                        <li class="hide--objid" id="profileObjId_0">1q2w3</li>
+                        <li class="profile_item">タグID</li>
+                        <li class="profile_info" id="tagId_0">1234567890</li>
+                        <li class="profile_item">お誕生日</li>
+                        <li class="profile_info" id="birth_0">1月2日</li>
+                        <li class="profile_item">性別</li>
+                        <li class="profile_info" id="sex_0">男の子</li>
+                        <li class="profile_item">好きなもの</li>
+                        <li class="profile_info" id="favorite_0">‐</li>
+                        <li class="profile_item">苦手なもの</li>
+                        <li class="profile_info" id="weak_0">‐</li>
+                    </ul>
+                    <div class="content3 profileEditBtn" onclick="profileEdit(0)">編集</div>
+                </div>
+            </div>
+        </div>
+        <div class="card3">
+            <div class="box3">
+                <!-- <img src="sample.jpg" class="image3"> -->
+                <div>
+                    <p class="title3" id="petName_1">名前２</p>
+                    <ul class="content3">
+                        <li class="hide--objid" id="profileObjId_1">e4r5</li>
+                        <li class="profile_item">タグID</li>
+                        <li class="profile_info" id="tagId_1">0987654321</li>
+                        <li class="profile_item">お誕生日</li>
+                        <li class="profile_info" id="birth_1">3月4日</li>
+                        <li class="profile_item">性別</li>
+                        <li class="profile_info" id="sex_1">女の子</li>
+                        <li class="profile_item">好きなもの</li>
+                        <li class="profile_info" id="favorite_1">‐</li>
+                        <li class="profile_item">苦手なもの</li>
+                        <li class="profile_info" id="weak_1">‐</li>
+                    </ul>
+                    <div class="content3 profileEditBtn" onclick="profileEdit(1)">編集</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!--モーダルウィンドウdebug-->
+      <div id="profileModal" class="hidden--profile"></div>
+      <section id="profileEditModal" class="hidden--profile profileEditSection">
+        <h3>プロフィール編集</h3>
+        <div class="editProfileZone">
+            <dl class="EditItems">お名前</dl>
+            <dl id="petNameItem">お名前</dl>
+            <input type="text" id="petNameInfo">
+            <dl class="hide--objid" id="profileObjId">DBのobjId</dl>
+            <dl class="EditItems">タグID</dl>
+            <dl id="tagIdItem">タグID</dl>
+            <input type="text" id="tagIdInfo">
+            <dl class="EditItems">お誕生日</dl>
+            <dl id="birthItem">お誕生日</dl>
+            <input type="text" id="birthInfo">
+            <dl class="EditItems">性別</dl>
+            <dl id="sexItem">性別</dl>
+            <input type="text" id="sexInfo">
+            <dl class="EditItems">好きなもの</dl>
+            <dl id="favoriteItem">好きなもの</dl>
+            <input type="text" id="favoriteInfo">
+            <dl class="EditItems">苦手なもの</dl>
+            <dl id="weakItem">苦手なもの</dl>
+            <input type="text" id="weakInfo">
+        </div>
+        <div id="debugjsinside">でバック確認用</div>
+        <div class="btnMotals" id="sendProfile">
+          保存
+        </div>
+        <div class="btnMotals" id="closeProfile">
+          ×
+        </div>
+      </section>
+     </section>
+
+   <!-- menu -->
+   <div class="menu">
+       <p id="ProfileBtn">Myページ</p>
+       <p id="ManageBtn">グラフ</p>
+       <p id="YesBtn_logout">ログアウト</p>
+   </div>
+      
+
+
+
 
       <!--Dialog box confirming logout-->
       <div data-role="popup" id="yesNoDialog_logout" data-overlay-theme="a" data-theme="c" data-dismissible="false" style="max-width:400px;" class="ui-corner-all">
