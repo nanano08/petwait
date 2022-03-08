@@ -1,6 +1,6 @@
 <<<<<<< HEAD
-var appKey    = "91fa4e1cd82bd235f3c67da4a6833f92a8475fb6f682071621df6a10718efe76";
-var clientKey = "c5a631c7f81e9411911880a744e989d2e548762825da8e5f9f5184e2811a6555";
+var appKey    = "";
+var clientKey = "";
 
 var ncmb = new NCMB(appKey, clientKey);
 
