@@ -78,9 +78,9 @@ function onRegisterBtn()
                         for (var whileCount = 0; whileCount < 2; whileCount++) { 
                             var makePetsData = ncmb.DataStore("PetProfileClass");
                             var petsDataBox = new makePetsData();
-                            var iniInfo_1 = "名前未設定";
-                            var iniInfo_2 = "未設定";
-                            var iniInfo_3 = "2006年4月11日";
+                            //var iniInfo_1 = "名前未設定";
+                            //var iniInfo_2 = "未設定";
+                            //var iniInfo_3 = "2006年4月11日";
                                 petsDataBox.set("userObjectId", currentNewUserId);
                                            //.set("petName", iniInfo_1)
                                            //.set("petTagId", iniInfo_2)
