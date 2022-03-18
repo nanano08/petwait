@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var appKey    = "91fa4e1cd82bd235f3c67da4a6833f92a8475fb6f682071621df6a10718efe76";
 var clientKey = "c5a631c7f81e9411911880a744e989d2e548762825da8e5f9f5184e2811a6555";
 
@@ -38,13 +37,34 @@ $(function() {
     $("#YesBtn_logout").click(onLogoutBtn);
     //グラフ表示//
     $("#graphReloadBtn").click(getChartData);
-    $("#tapDisplayGraph").click(getChartData);
+    $(".iniMemoZone").click(getChartData);
     $("#profileReloadBtn").click(updateAppDisplay);
+
+    //タップゾーン非表示にしたのでOFF
+    //$("#tapDisplayGraph").click(getChartData);
 
 });
 
 //----------------------------------USER MANAGEMENT-------------------------------------//
 var currentLoginUser; //現在ログイン中ユーザー
+
+function CheckPassword() {
+		// 入力値取得
+		var input1 = $("#reg_password").val();
+		var input2 = $("#reg_confirmpassword").val();
+
+        var checkResults = document.getElementById("constCheckPass");
+
+		// パスワード比較
+		if(input1 != input2){
+			//confirm.setCustomValidity("入力値が一致しません。");
+            checkResults.innerText = "入力値が一致しません。";
+
+		}else{
+			//confirm.setCustomValidity('');
+            checkResults.innerText = "";
+		}
+}
 
 function onRegisterBtn()
 {
@@ -53,7 +73,16 @@ function onRegisterBtn()
     var password = $("#reg_password").val();
     //var pettagid_1 = $("#reg_pettagid_1").val();
     //var pettagid_2 = $("#reg_pettagid_2").val();
-    
+    var comfirmPassword = $("#reg_confirmpassword").val();
+
+    // パスワード比較。一致しないまま新規登録ボタン押下した場合に以降の処理させずにreturn
+		if(password != comfirmPassword){
+            var checkResultsWord = document.getElementById("constCheckPass");
+            return checkResultsWord.innerText = "入力値が一致しません。";
+		}else{
+
+		}
+
     var user = new ncmb.User();
     user.set("userName", username)
         .set("password", password)
@@ -224,8 +253,15 @@ function getChartData()
   $(".tapGraphZorn #tapDisplayGraph").removeClass("tapGraphZorn");
   $("#tapDisplayGraph").addClass("hide--display");
 
+  $(".contents").css({'background-image':'none'});
+  $(".memoBlocks").css({'display':'contents'});
+  $(".iniMemoZone").css({'display':'none'});
+
+
   //canvasの親要素のdivに高さを設定すると、canvasはその中で表示される、グラフの高さを指定できる
-  $(".canvasDrawZone").css({'height':'50%'});
+  //こっちで指定されてるっぽい
+  var specifyHeight = '43vh';
+  $(".canvasDrawZone").css({'height':specifyHeight});
 
   //var canvasParentDiv = document.getElementsByClassName(".display--chart");
   //var canvasChild = document.getElementById("myChart");
@@ -337,21 +373,43 @@ function getChartData()
             //取得できなかった表示をする
             var errMsgDisplay = document.getElementById("canvasDrawZone");
             errMsgDisplay.innerHTML = "データ取得できませんでした。もしくは該当しませんでした。";
-            });        
+            });
 }
+
+
+
 
 //グラフ描画を呼び出す関数
 function drawChart()
 {
+  var specifyHeight = '40vh'; 
+  var ctxHeight = document.getElementById('myChart');
+  ctxHeight.height = specifyHeight;
+  //$("#myChart").css({'height':specifyHeight});
+
   //プロフィールからペットの名前を取得
   var petNameLable_0 = document.getElementById("petName_0").innerText;
   var petNameLable_1 = document.getElementById("petName_1").innerText;
   //Chart.jsで折れ線グラフを描画
   const ctx = document.getElementById('myChart').getContext('2d');
+  //var ctxHeight = document.getElementById('myChart');
+  //ctxHeight.height = window.innerHeight/2.5;
   
+
   Chart.defaults.global.defaultFontColor = '#210D0D';
   Chart.defaults.global.defaultFontFamily = "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif";
-  Chart.defaults.global.defaultFontSize = 11;
+  Chart.defaults.global.defaultFontSize = 12;
+
+  //グラフの色とメモ管理のペット名カラーを一致させる
+  const colorLabel_0 = '#FB5860';
+  const colorLabel_1 = '#0AD8D5';
+
+  $("#memoPetName_0").css({'border-left':'8px solid' + colorLabel_0});
+  $("#memoPetName_1").css({'border-left':'8px solid' + colorLabel_1});
+  $(".titleMemoDateBlocks_0").css({'background':'linear-gradient(transparent 80%, ' + colorLabel_0 + ' 70%)'});
+  $(".titleMemoDateBlocks_1").css({'background':'linear-gradient(transparent 80%, ' + colorLabel_1 + ' 70%)'});
+
+
 
   const myChart = new Chart(ctx, {
     type: 'line',
@@ -367,7 +425,7 @@ function drawChart()
                 'rgba(255, 255, 255, 0.1)',
             ],
             borderColor: [
-                '#FB5860',
+                colorLabel_0,
             ],
             borderWidth: 2,
             lineTension: 0,
@@ -382,7 +440,7 @@ function drawChart()
                 'rgba(255, 255, 255, 0.1)',
             ],
             borderColor: [
-                '#0AD8D5',
+                colorLabel_1,
             ],
             borderWidth: 2,
             lineTension: 0,
@@ -429,6 +487,42 @@ function drawChart()
     });
         //$.mobile.changePage('#DetailPage');
 }
+
+    //使い方ガイドのバー機能
+    var  upSpeed= 20;  //メッセージのスライド速度
+    var  delay = 4800; // 次のメッセージに切り替わるまでの静止時間
+    var  tickerH= 32;  // 表示ボックスの高さ
+    window.onload =function divScroller(){
+        scroller = document.getElementById("ticKerUseTip"); // div 表示ボックス
+        scroller.style.height= tickerH+"px"; // 表示ボックスの高さ
+        scroller.style.lineHeight= tickerH+"px"; // 行の高さ  
+        slide = document.getElementById("ulArea"); // スライドさせる ul要素
+        slide.style.position = "absolute"; // 絶対配置
+        slide.style.top = tickerH+"px" ;  // slide のtop(上辺)の位置
+        innScroll(tickerH, upSpeed, delay)
+    }
+    function innScroll(tickerH, upSpeed, delay){
+    msec = upSpeed; // スクロール時間
+    numTop = parseInt(slide.style.top) // 数値文字列を整数に変換
+        if (numTop > -tickerH){ // top位置が -30にならない間は
+            slide.style.top = (numTop-1)+"px"; // top位置を -1px 上へ
+        } else { slide.style.top = 0+"px"; 
+                cngLi(); // 次のメッセージと交代
+                }
+    if(numTop==0){msec = delay;// 静止時間 現在のメッセージを待機
+    }
+        setTimeout("innScroll("+ tickerH +","+ upSpeed +"," + delay +")", msec);
+    }
+    function cngLi(){ // メッセージの移動
+    base= document.getElementById("ulArea");
+        liList = base.getElementsByTagName("li");// 与えられたタグ名を持つ要素のリスト
+        elm = liList[0];// 最上部の "li"要素
+        base.appendChild(elm); // elm を子ノードとして末尾に移動する。
+    }
+
+
+
+
 
 //メモ欄をペット別に表示ON/OFFの動作部分。
 function checkEdit() {
@@ -520,8 +614,20 @@ $(function(){
                     .update()
                     //.save()
                     .then(function(result){
+                            //保存後の動作
+                            $(function(){
+                                $(".afterMotal").removeClass("hide--afterSendMotal");//表示できる
+                                document.getElementById("afSendMsg_p1").innerText = "保存完了";
+                                document.getElementById("afSendMsg_p2").innerText = "タップして閉じる";
+                            });
                         })
                         .catch(function(error){
+                            //エラー処理
+                            $(function(){
+                                $(".afterMotal").removeClass("hide--afterSendMotal");//表示できる
+                                document.getElementById("afSendMsg_p1").innerText = "保存エラー";
+                                document.getElementById("afSendMsg_p2").innerText = "もう一度お試しください";
+                            });
                         });
           })
 
@@ -643,13 +749,39 @@ function finalCheckSend(sendObjId, infoFlags, sendProDatas) {
                       //保存したobjectオブジェクトを更新
                       object.update();
                   })
-                  //.then(function(result){
-                  //    //更新後の処理
-                  //})
+                  .then(function(result){
+                      //更新後の処理
+                      $(function(){
+                        $(".afterMotal").removeClass("hide--afterSendMotal");//表示できる
+                        document.getElementById("afSendMsg_p1").innerText = "保存完了";
+                        document.getElementById("afSendMsg_p2").innerText = "タップして閉じる";
+                      });
+                  })
                   .catch(function(error){
                       //エラー処理
+                      $(function(){
+                        $(".afterMotal").removeClass("hide--afterSendMotal");//表示できる
+                        document.getElementById("afSendMsg_p1").innerText = "保存エラー";
+                        document.getElementById("afSendMsg_p2").innerText = "もう一度お試しください";
+                      });
                   });
 }
+
+//保存ボタン押下後に表示されるボタン動作
+$(function(){
+  $(".afterMotal").click(function(){//イベントスタート
+            $(".afterMotal").addClass("hide--afterSendMotal");//非表示にする
+            var elm_main = document.getElementById("GraphMemoScreen");
+            var elm_profile = document.getElementById("myPageScreen");
+            if(elm_main.classList.contains("hide--Screen") == true) {
+                updateAppDisplay();//プロフィールの更新
+            }
+
+            if(elm_profile.classList.contains("hide--Screen") == true) {
+                getChartData();//グラフとメモの更新
+            }
+        })
+});
 
 function updateAppDisplay() {
     var currentLoginUser = ncmb.User.getCurrentUser();
@@ -753,3 +885,5 @@ $(function(){
     $(".GraphMemo").removeClass("hide--Screen");//表示できる
   })
 });
+
+

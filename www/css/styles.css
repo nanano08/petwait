@@ -390,6 +390,7 @@ a {
     /*background-color: #FBFDFD;*/
     text-shadow: none;
     font-family: "Hiragino Sans W3", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+    display: block;
 }
 
 .titleName {
@@ -435,6 +436,7 @@ a {
 }
 
 #tapDisplayGraph {
+  cursor: pointer;
   text-align: center;
   color: #5f5f5f;
   padding: 1em;
@@ -456,7 +458,7 @@ a {
     display: block;
     width: 4em;
     padding: 0.2em 0.3em;
-    margin-top: -10px;
+    margin-top: -8px;
     right: 10px;
     color: #F6F3F5;
     font-size: smaller;
@@ -472,7 +474,44 @@ a {
     touch-action: manipulation;    
 }
 
+#wrapperUseTip {
+  display: block;
+  width:100%;
+  text-align:left;
+  margin:auto auto;
+  left: 0;
+}
+#titleUseTip {
+  font-size:small;
+  font-weight: 700;
+  /*margin:0 0 20px 0;*/
+}
 
+#ticKerUseTip {
+  border-radius: 20px; /* 角丸ボーダー */
+  width: auto;  /* 横幅 */
+  background:#ebebeb; /* 背景色 */
+  position: relative; /* 相対配置（相対位置）*/
+  overflow: hidden; /* はみ出た部分を非表示 */
+  /*margin: 0 auto;*/
+  margin-top: 2em;
+  box-shadow: 1.0px 1.9px 2.5px rgba(0, 0, 0, 0.057);
+  /*mix-blend-mode: multiply;*/
+}
+
+#ticKerUseTip ul {
+  padding: 0; /* 内側余白*/
+  margin: 0 auto; 
+}
+#ticKerUseTip li {
+  list-style-type: none; /* リストマーク なし */
+  line-height:2.5em;
+  padding-left: 1.5em;
+  color: #000;
+  font-weight: 400;
+  font-size: small;
+  text-align:left;
+}
 
 #memoZoneTitle {
   /*width: 23%;*/
@@ -499,7 +538,9 @@ a {
 .canvasDrawZone {
     position: relative;
     display: block;
+    width: auto;
     margin-top: 2em;
+    height: auto;
     /*画面の向きを縦→横→縦にしたときにレイアウト壊れないようにscale*/
     /*scale: 2,1;*/
 }
@@ -529,6 +570,14 @@ dd{
     font-size: large;
     font-weight: bold;
     letter-spacing: 0.04em;
+    /*background: linear-gradient(transparent 70%, #F6F3F5 70%);*/
+}
+
+.titleMemoDateBlocks_0 {
+    background: linear-gradient(transparent 70%, #F6F3F5 70%);
+}
+
+.titleMemoDateBlocks_1 {
     background: linear-gradient(transparent 70%, #F6F3F5 70%);
 }
 
@@ -563,29 +612,22 @@ dd{
     background: transparent;
     transition: all 0.5s;
     z-index: 1;
+    background-repeat: no-repeat;
+    background-position: bottom;
 }
 
-.navDiv::before {
- content: "";
- position: absolute;
- top: 0;
- left: 0;
- width: 0.5em;
- height: 100%;
- background-color: #FB5860;
- z-index: -1;
- transition: all 0.5s;
+#memoPetName_0 {
+    border-left: 8px solid gray;
 }
-.navDiv:hover::before {
- width: 100%;
+
+#memoPetName_1 {
+    border-left: 8px solid gray;
+
 }
 
 .navDiv:hover {
- color: rgb(255, 255, 255);
-}
-
-.navDiv:active:before {
- background: #FB5860;
+ transform:scale(1.2);
+ transition: all 0.5s;
 }
 
 .nav > dt:last-child {
@@ -618,10 +660,14 @@ dd{
   white-space: nowrap;
   overflow: auto;
   height: 30em;
+  overflow-wrap: normal;
+  word-break: normal;
   text-decoration: none;
   letter-spacing: 0;
   text-shadow: none;
-  background-color: #fffffe;
+  background-color:rgb(251, 251, 251);
+  /*background-color: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);*/
+  background-image: #ebebeb;
   border: none;
   -webkit-transition: background-color 0.2s linear, color 0.2s linear, opacity 0.2s linear;
   -moz-transition: background-color 0.2s linear, color 0.2s linear, opacity 0.2s linear;
@@ -636,6 +682,20 @@ dd{
   width: 95%;
   box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
 }
+
+.memoBlocks {
+    display: none;
+}
+
+.iniMemoZone p {
+    color: #616161b6;
+    font-size: large;
+    font-weight: 100;
+    white-space: normal;
+    padding-left: 1em;
+
+}
+
 
 
 .contents > dt {
@@ -727,7 +787,7 @@ dd{
     font-size: medium;
     background-color: #0AD8D5;
     color: #0d0f0f;
-    transition: all .3s;
+    transition: all .5s;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
@@ -747,8 +807,8 @@ dd{
 	padding:auto auto;
 	margin:auto auto 0;
     position: absolute;
-    top: 3%;
-    right: 5%;
+    top: 1em;
+    right: 1em;
     transition: all .3s;
     user-select: none;
     -webkit-user-select: none;
@@ -847,11 +907,11 @@ textarea {
     position: absolute;
     display: block;
     width: 4em;
-    padding: 0.4em 0.5em;
-    top: 50px;
+    padding: 0.2em 0.3em;
+    top: 135px;
     right: 10px;
     color: #F6F3F5;
-    font-size: small;
+    font-size: smaller;
     text-align: center;
     letter-spacing: 0.1em;
     background-image: linear-gradient(135deg, #FF0072 10%, #FB5860 100%);
@@ -971,7 +1031,19 @@ textarea {
 }
 
 h3 {
+    position: absolute;
+    top: 0;
     float: left;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+h5 {
+    position: absolute;
+    top: 3em;
+    float: left;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 .editProfileZone {
@@ -984,11 +1056,101 @@ h3 {
     font-size: larger;
     background-image: repeating-linear-gradient(45deg, #0AD8D5 0, #F6F3F5 2px, transparent 2px, transparent 4px);
     background-repeat: no-repeat;
-    background-size: 100% 9%;
-    background-position: bottom;
+    background-size: 7em 0.5em;
+    background-position: left bottom;
 }
 
+#afterSend {
+    background:rgba(0, 0, 0, 0.3);
+	position:fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	z-index: 999;
+}
+
+#afterSendMsg {
+    cursor: pointer;
+    /*background:#fff;*/
+	/*width:100%;*/
+	padding:20px 20px;
+	/*border-radius:50%;*/
+    height: 120px;
+	position:absolute;
+	top:35%;
+	left:5%;
+	right:5%;
+	/*margin:0;*/
+	transition:transform 0.4s;
+	z-index: 999;
+    text-align: center;
+    /*はみ出すテキストを…で省略*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* From cssbuttons.io */
+#afterSendMsg div {
+ --glow-color: #ff0073d3;
+ --glow-spread-color: #ffffff;
+ --enhanced-glow-color: #239694e3;
+ --btn-color: #fffffff1;
+ border: .25em solid var(--glow-color);
+ padding: 1em 3em;
+ color: var(--glow-color);
+ font-weight: bold;
+ background-color: var(--btn-color);
+ border-radius: 1.5em;
+ outline: none;
+ box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 1em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+ text-shadow: 0 0 .1em var(--glow-color);
+ position: relative;
+ transition: all 0.5s;
+}
+
+#afSendMsg_p1 {
+    font-size: x-large;
+}
+
+#afSendMsg_p2 {
+    font-size: 10px;
+    padding-bottom: 2em;
+}
+
+#afterSendMsg div::after {
+ pointer-events: none;
+ content: "";
+ position: absolute;
+ top: 120%;
+ left: 0;
+ height: 100%;
+ width: 100%;
+ /*ボックス下の影*/
+ /*background-color: var(--glow-spread-color);*/
+ filter: blur(2em);
+ opacity: .7;
+ transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+}
+
+#afterSendMsg div:hover {
+ color: var(--btn-color);
+ background-color: var(--glow-color);
+ box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 2em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+}
+
+#afterSendMsg div:active {
+ box-shadow: 0 0 0.6em .25em var(--glow-color),
+        0 0 2.5em 2em var(--glow-spread-color),
+        inset 0 0 .5em .25em var(--glow-color);
+}
+
+
 /*画面に表示しない*/
-.hide--Screen, .hide--objid, .hidden--profile, #hereWrite, #hereShow ,#debugjsinside{
+.tapGraphZorn, .hide--afterSendMotal, .hide--popup, .hide--Screen, .hide--objid, .hidden--profile, #hereWrite, #hereShow ,#debugjsinside{
     display: none;
 }

@@ -24,9 +24,9 @@
       <section data-role="content">
       <p class="constLogin" id="constWord_Login">ログイン</p>
       <p class="constLogin">ユーザー名</p>
-        <input type="text" id="login_username">
+        <input type="text" id="login_username" minlength="5">
       <p class="constLogin">パスワード</p>
-        <input type="password" id="login_password">
+        <input type="password" id="login_password" minlength="7">
         <p id="loginZone"><a href="#" id="LoginBtn">ログイン</a></p>
         <p id="signUpZone"><a href="#RegisterPage" id="signUpBtn">新規登録</a></p>
         
@@ -39,12 +39,14 @@
       <p id="appTiele_Register">Pet体重管理</p>
     </header>
       <section data-role="content" id="registerSection">
-      <p id="constWord_SignUp">登録情報</p>
+      <p id="constWord_SignUp">登録情報を入力</p>
       <p class="constRegister">ユーザー名</p>
-        <input type="text" id="reg_username">
+        <input type="text" id="reg_username" minlength="5" placeholder="5文字以上">
       <p class="constRegister">パスワード</p>
-        <input type="password" id="reg_password">
-      <p class="registerPageBtns"><a href="#" id="RegisterBtn">新規登録する</a></p>
+        <input type="password" id="reg_password" minlength="7" placeholder="7文字以上" required>
+        <input type="password" id="reg_confirmpassword" minlength="7" placeholder="確認のためもう一度入力" oninput="CheckPassword()" required>
+        <h4 id="constCheckPass"></h4>
+      <p class="registerPageBtns"><a href="#" id="RegisterBtn">新規登録</a></p>
       <p class="registerPageBtns"><a href="#LoginPage" id="returnPageBtn">戻る</a></p>
       </section>
   </div>
@@ -58,12 +60,23 @@
       <!-- <a class="logoutBtn" id="YesBtn_logout">Logout</a> -->
     <!-- </header> -->
     <section data-role="content"id="mainScreen">
-     <section  class="diplayScreen GraphMemo">
+     <section  class="diplayScreen GraphMemo" id="GraphMemoScreen">
       <!--Detail show-->
       <!--<div data-role="content" id="detailArea">ようこそ！ログイン成功しました！</div>-->
       <div class="titleName btnGraphDisplay" id="drawMyChart">体重グラフ</div>
-      <!--グラフ表示ゾーンのスペース確保-->
+      <!--使い方ガイドバー-->
+        <div id="wrapperUseTip">
+            <div id="titleUseTip"></div>
+                <div  id="ticKerUseTip">
+                    <ul id="ulArea"> <!-- ul要素 箇条書き -->
+                        <li>グラフを更新するには更新ボタンをタップ</li>
+                        <li>ペット名を1回タップするとグラフを非表示</li>
+                        <li>非表示にしたグラフはペット名をタップして表示</li>
+                    </ul>
+                </div>
+        </div>
       <div class="btnMotals" id="graphReloadBtn">更新</div>
+      <!--グラフ表示ゾーンのスペース確保-->
       <div class="tapGraphZorn" id="tapDisplayGraph">タップしてグラフを表示する</div>
       <!--ここのcanvasにグラフ表示したい-->
       <div class="canvasDrawZone">
@@ -75,7 +88,6 @@
       <div id="hereShow">ここに取得したデータのなにか表示</div>
 
 
-
       <div class="titleName" id="memoZoneTitle">メモ管理</div>
       <!--画面下半分にメモゾーン-->
       <div class="wrapper">
@@ -83,118 +95,162 @@
               <div class="navDiv navTitle_0" id="memoPetName_0">名前１</div>
               <div class="navDiv navTitle_1" id="memoPetName_1">名前２</div>
           </div>
-          <dl class="contents"> 
+          <dl class="contents" id="memoContents"> 
             <dt id="memoF">
               <dl>
-                <dt class="titleMemoDate" id="memodate_0_0">日付</dt>
-                <dd id="memofield_0_0">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,0)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_0">DBのobjId</dd>
+                  <div class="iniMemoZone">
+                      <p>ここをタップして</p>
+                      <p>グラフとメモを確認する</p>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_1">日付</dt>
-                <dd id="memofield_0_1">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,1)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_1">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_0">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_0">日付</dt>
+                    <dd id="memofield_0_0">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,0)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_0">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_2">日付</dt>
-                <dd id="memofield_0_2">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,2)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_2">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_1">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_1">日付</dt>
+                    <dd id="memofield_0_1">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,1)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_1">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_3">日付</dt>
-                <dd id="memofield_0_3">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,3)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_3">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_2">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_2">日付</dt>
+                    <dd id="memofield_0_2">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,2)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_2">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_4">日付</dt>
-                <dd id="memofield_0_4">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,4)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_4">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_3">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_3">日付</dt>
+                    <dd id="memofield_0_3">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,3)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_3">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_5">日付</dt>
-                <dd id="memofield_0_5">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,5)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_5">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_4">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_4">日付</dt>
+                    <dd id="memofield_0_4">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,4)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_4">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_6">日付</dt>
-                <dd id="memofield_0_6">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,6)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_6">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_5">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_5">日付</dt>
+                    <dd id="memofield_0_5">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,5)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_5">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_7">日付</dt>
-                <dd id="memofield_0_7">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,7)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_7">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_6">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_6">日付</dt>
+                    <dd id="memofield_0_6">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,6)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_6">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_8">日付</dt>
-                <dd id="memofield_0_8">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,8)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_8">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_7">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_7">日付</dt>
+                    <dd id="memofield_0_7">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,7)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_7">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_0_9">日付</dt>
-                <dd id="memofield_0_9">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(0,9)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_0_9">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_0_8">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_8">日付</dt>
+                    <dd id="memofield_0_8">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,8)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_8">DBのobjId</dd>
+                  </div>
+
+                  <div class="memoBlocks" id="memoBlock_0_9">
+                    <dt class="titleMemoDate titleMemoDateBlocks_0" id="memodate_0_9">日付</dt>
+                    <dd id="memofield_0_9">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(0,9)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_0_9">DBのobjId</dd>
+                  </div>
               </dl>
             </dt>
             <dt class="is-hidden" id="memoF">
               <dl>
-                <dt class="titleMemoDate" id="memodate_1_0">日付</dt>
-                <dd id="memofield_1_0">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,0)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_0">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_0">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_0">日付</dt>
+                    <dd id="memofield_1_0">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,0)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_0">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_1">日付</dt>
-                <dd id="memofield_1_1">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,1)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_1">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_1">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_1">日付</dt>
+                    <dd id="memofield_1_1">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,1)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_1">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_2">日付</dt>
-                <dd id="memofield_1_2">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,2)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_2">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_2">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_2">日付</dt>
+                    <dd id="memofield_1_2">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,2)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_2">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_3">日付</dt>
-                <dd id="memofield_1_3">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,3)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_3">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_3">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_3">日付</dt>
+                    <dd id="memofield_1_3">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,3)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_3">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_4">日付</dt>
-                <dd id="memofield_1_4">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,4)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_4">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_4">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_4">日付</dt>
+                    <dd id="memofield_1_4">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,4)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_4">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_5">日付</dt>
-                <dd id="memofield_1_5">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,5)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_5">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_5">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_5">日付</dt>
+                    <dd id="memofield_1_5">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,5)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_5">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_6">日付</dt>
-                <dd id="memofield_1_6">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,6)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_6">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_6">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_6">日付</dt>
+                    <dd id="memofield_1_6">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,6)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_6">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_7">日付</dt>
-                <dd id="memofield_1_7">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,7)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_7">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_7">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_7">日付</dt>
+                    <dd id="memofield_1_7">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,7)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_7">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_8">日付</dt>
-                <dd id="memofield_1_8">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,8)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_8">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_8">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_8">日付</dt>
+                    <dd id="memofield_1_8">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,8)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_8">DBのobjId</dd>
+                  </div>
 
-                <dt class="titleMemoDate" id="memodate_1_9">日付</dt>
-                <dd id="memofield_1_9">メモの内容が入ります。</dd>
-                <dd><a class="button--middle" onclick="startEditBtnJs(1,9)" id="startEditBtn">編集</a></dd>
-                <dd class="hide--objid" id="objId_1_9">DBのobjId</dd>
+                  <div class="memoBlocks" id="memoBlock_1_9">
+                    <dt class="titleMemoDate titleMemoDateBlocks_1" id="memodate_1_9">日付</dt>
+                    <dd id="memofield_1_9">メモの内容が入ります。</dd>
+                    <dd><a class="button--middle" onclick="startEditBtnJs(1,9)" id="startEditBtn">編集</a></dd>
+                    <dd class="hide--objid" id="objId_1_9">DBのobjId</dd>
+                  </div>
               </dl>
             </dt>
           </dl>
       </div>
 
       <div class="hide--objid" id="debugObjId">テスト表示</div>
-
 
       <!--モーダルウィンドウdebug-->
       <div id="maskMotal" class="hidden"></div>
@@ -210,10 +266,32 @@
         <div class="btnMotals" id="closeMotal">×</div>
       </section>
     </section>
+
+    <section class="afterMotal hide--afterSendMotal" id="afterSend">
+          <div id="afterSendMsg">
+              <div>
+                <!--保存ボタン押下後のメッセージ入れる箇所-->
+                <p id="afSendMsg_p1"></p>
+                <p id="afSendMsg_p2"></p>
+              </div>
+          </div>
+    </section>
     
     <section class="hide--Screen ProfileMyPage" id="myPageScreen">
     <div class="titleName" id="profileTitle">プロフィール</div>
+
+        <!--使い方ガイドバー-->
+        <div id="wrapperUseTip">
+            <div id="titleUseTip"></div>
+                <div  id="ticKerUseTip">
+                    <ul id="ulArea"> <!-- ul要素 箇条書き -->
+                        <li>プロフィールを更新するには更新ボタンをタップ</li>
+                    </ul>
+                </div>
+        </div>
+
     <div class="btnMotals" id="profileReloadBtn">更新</div>
+
         <div class="profileCards3">
         <div class="card3">
             <div class="box3">
@@ -223,7 +301,7 @@
                     <ul class="content3">
                         <li class="hide--objid" id="profileObjId_0">1q2w3</li>
                         <li class="profile_item">タグID</li>
-                        <li class="profile_info" id="tagId_0">1234567890</li>
+                        <li class="profile_info" id="tagId_0">tagNumber1</li>
                         <li class="profile_item">お誕生日</li>
                         <li class="profile_info" id="birth_0">1月2日</li>
                         <li class="profile_item">性別</li>
@@ -245,7 +323,7 @@
                     <ul class="content3">
                         <li class="hide--objid" id="profileObjId_1">e4r5</li>
                         <li class="profile_item">タグID</li>
-                        <li class="profile_info" id="tagId_1">0987654321</li>
+                        <li class="profile_info" id="tagId_1">tagNumber2</li>
                         <li class="profile_item">お誕生日</li>
                         <li class="profile_info" id="birth_1">3月4日</li>
                         <li class="profile_item">性別</li>
@@ -265,26 +343,28 @@
       <div id="profileModal" class="hidden--profile"></div>
       <section id="profileEditModal" class="hidden--profile profileEditSection">
         <h3>プロフィール編集</h3>
+        <h5>未入力の項目は更新されません。</h5>
         <div class="editProfileZone">
             <dl class="EditItems">お名前</dl>
             <dl id="petNameItem">お名前</dl>
-            <input type="text" id="petNameInfo">
+            <input type="text" id="petNameInfo" maxlength="10" placeholder="10文字以内で入力">
             <dl class="hide--objid" id="profileObjId">DBのobjId</dl>
             <dl class="EditItems">タグID</dl>
             <dl id="tagIdItem">タグID</dl>
-            <input type="text" id="tagIdInfo">
+            <!--<dl id="uploadTagIdCaution">注意：タグIDを更新すると以前のデータは確認できません。</dl>-->
+            <input type="text" id="tagIdInfo" maxlength="10" placeholder="10文字以内で入力">
             <dl class="EditItems">お誕生日</dl>
             <dl id="birthItem">お誕生日</dl>
-            <input type="text" id="birthInfo">
+            <input type="text" id="birthInfo" maxlength="10" placeholder="10文字以内で入力">
             <dl class="EditItems">性別</dl>
             <dl id="sexItem">性別</dl>
-            <input type="text" id="sexInfo">
+            <input type="text" id="sexInfo" maxlength="10" placeholder="10文字以内で入力">
             <dl class="EditItems">好きなもの</dl>
             <dl id="favoriteItem">好きなもの</dl>
-            <input type="text" id="favoriteInfo">
+            <input type="text" id="favoriteInfo" maxlength="30" placeholder="30文字以内で入力">
             <dl class="EditItems">苦手なもの</dl>
             <dl id="weakItem">苦手なもの</dl>
-            <input type="text" id="weakInfo">
+            <input type="text" id="weakInfo" maxlength="30" placeholder="30文字以内で入力">
         </div>
         <div id="debugjsinside">でバック確認用</div>
         <div class="btnMotals" id="sendProfile">
@@ -294,11 +374,17 @@
           ×
         </div>
       </section>
+
+      <!--DebugPopup-->
+      <section class="hide--popup popUpModal">
+        <div id="sendCompletePop">送信完了</div>
+      </section>
+
      </section>
 
    <!-- menu -->
    <div class="menu">
-       <p id="ProfileBtn">Myページ</p>
+       <p id="ProfileBtn">マイページ</p><!--Myページ-->
        <p id="ManageBtn">グラフ</p>
        <p id="YesBtn_logout">ログアウト</p>
    </div>
