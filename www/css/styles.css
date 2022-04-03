@@ -536,6 +536,7 @@ a {
 
 /*グラフ表示するキャンバスの親要素divのclass名*/
 .canvasDrawZone {
+    user-select: none;
     position: relative;
     display: block;
     width: auto;
@@ -1151,6 +1152,6 @@ h5 {
 
 
 /*画面に表示しない*/
-.tapGraphZorn, .hide--afterSendMotal, .hide--popup, .hide--Screen, .hide--objid, .hidden--profile, #hereWrite, #hereShow ,#debugjsinside{
+.tapGraphZorn, .hide--afterSendMotal, .hide--popup, .hide--Screen, .hide--objid, .hidden--profile, #hereWrite, #hereShow, #debugjsinside {
     display: none;
 }
