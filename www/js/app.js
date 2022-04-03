@@ -1,5 +1,5 @@
-var appKey    = "";
-var clientKey = "";
+var appKey    = "appKey";
+var clientKey = "clientKey";
 
 var ncmb = new NCMB(appKey, clientKey);
 
@@ -45,9 +45,6 @@ $(function() {
 
 });
 
-//----------------------------------USER MANAGEMENT-------------------------------------//
-var currentLoginUser; //現在ログイン中ユーザー
-
 function CheckPassword() {
 		// 入力値取得
 		var input1 = $("#reg_password").val();
@@ -66,6 +63,10 @@ function CheckPassword() {
 		}
 }
 
+
+//----------------------------------USER MANAGEMENT-------------------------------------//
+var currentLoginUser; //現在ログイン中ユーザー
+
 function onRegisterBtn()
 {
     //入力フォームからusername, password変数にセット
@@ -76,19 +77,17 @@ function onRegisterBtn()
     var comfirmPassword = $("#reg_confirmpassword").val();
 
     // パスワード比較。一致しないまま新規登録ボタン押下した場合に以降の処理させずにreturn
-		if(password != comfirmPassword){
-            var checkResultsWord = document.getElementById("constCheckPass");
-            return checkResultsWord.innerText = "入力値が一致しません。";
-		}else{
-
-		}
+    if(password != comfirmPassword){
+        var checkResultsWord = document.getElementById("constCheckPass");
+        return checkResultsWord.innerText = "入力値が一致していません。";
+    }else{
 
     var user = new ncmb.User();
     user.set("userName", username)
-        .set("password", password)
+        .set("password", password);
+        //.save();
         //.set("petTagId_1", pettagid_1)
         //.set("petTagId_2", pettagid_2)
-        .save();
 
     
     // ユーザー名とパスワードで新規登録
@@ -99,10 +98,10 @@ function onRegisterBtn()
                      .then(function(login_user) {
                          alert("新規登録とログイン成功");
                          currentLoginUser = ncmb.User.getCurrentUser();
-                        $.mobile.changePage('#DetailPage');
+                         $.mobile.changePage('#DetailPage');
                         //現在ログインしているユーザーのオブジェクトIDを取得
-                        var currentNewLoginUser = ncmb.User.getCurrentUser();
-                        var currentNewUserId = currentNewLoginUser.get("objectId");
+                        //var currentNewLoginUser = ncmb.User.getCurrentUser();
+                        var currentNewUserId = currentLoginUser.get("objectId");
                         //ペットデータクラスにデータ2つ作成する動作をここに作成する
                         //オブジェクトIDからペットデータクラスに箱を用意（2回回す）
                         for (var whileCount = 0; whileCount < 2; whileCount++) { 
@@ -119,13 +118,13 @@ function onRegisterBtn()
                                            //.set("petFavorite", iniInfo_2)
                                            //.set("petWeak", iniInfo_2);
 
-                                petsDataBox.save()
-                                           .then(function(petsDataBox) {
-                                                   // Save success.
-                                               })
-                                               .catch(function(error) {
-                                                   // Save failed.
-                                               });
+                                petsDataBox.save();
+                                           //.then(function(petsDataBox) {
+                                           //        // Save success.
+                                           //    })
+                                           //.catch(function(error) {
+                                           //        // Save failed.
+                                           //    });
                         }
                      })
                      .catch(function(error) {
@@ -135,6 +134,8 @@ function onRegisterBtn()
         .catch(function(error) {
             alert("新規登録に失敗！次のエラー発生：" + error);
         });
+    }
+    
 }
 
 function onLoginBtn()
@@ -275,7 +276,7 @@ function getChartData()
   var profileTagId1 = document.getElementById("tagId_0").innerText;
   var profileTagId2 = document.getElementById("tagId_1").innerText;
   //ニフクラmbからデータ取得
-  var getObj = ncmb.DataStore("TestClass");
+  var getObj = ncmb.DataStore("PetRecordClass");
   getObj.equalTo("petTagId", profileTagId1)
           .order("createDate") //並び替え降順指定
           .limit(limitAndBox) //取ってくる値の数
@@ -290,7 +291,7 @@ function getChartData()
               for (var i = 0; i < results.length; i++) {
                 var object = results[i];
                 //代入確認用getObjScore.push(object.message);
-                getObjScore[i] = object.petWeight; //+ " - " + object.get("newfield");
+                getObjScore[i] = object.petWeigth; //+ " - " + object.get("newfield");
                 //petWeightの値を格納
                 //weightData[i] = getObjScore[i];
                 //labelsdatesに日時を入れるけど多分formerDateを経由しなくてもよさそう
@@ -298,7 +299,7 @@ function getChartData()
                 
                 labelsdates[i] = formerDate[i];
                 
-                petsMemo[i] = object.newfield;
+                petsMemo[i] = object.dailyMemo;
 
                 //メモ欄に値を入れる
                 var importMemoDates = document.getElementById("memodate_0_" + i);
@@ -307,8 +308,15 @@ function getChartData()
                 var importObjectId = document.getElementById("objId_0_" + i);
                 //実際にテキストを入れる
                 importMemoDates.innerText = formerDate[i];
-                importMemoFields.innerText = petsMemo[i];
+                
                 importObjectId.innerText = object.objectId;
+
+                if(petsMemo[i] === undefined) {
+                    importMemoFields.innerText = "メモの内容が入ります。";
+                } else {
+                //PetProfileClassのpetSexの値を代入
+                importMemoFields.innerText = petsMemo[i];
+                }
 
               }
 
@@ -333,7 +341,7 @@ function getChartData()
 
 
   //ニフクラmbからデータ取得
-  var getObjKuroSiro = ncmb.DataStore("TestClass");
+  var getObjKuroSiro = ncmb.DataStore("PetRecordClass");
   getObjKuroSiro.equalTo("petTagId", profileTagId2)
           .order("createDate") //並び替え降順指定
           .limit(limitAndBox) //取ってくる値の数
@@ -344,13 +352,13 @@ function getChartData()
               for (var i = 0; i < results.length; i++) {
                 var object = results[i];
                 //代入確認用getObjScore.push(object.message);
-                getObjScoreKuroSiro[i] = object.petWeight; //+ " - " + object.get("newfield");
+                getObjScoreKuroSiro[i] = object.petWeigth; //+ " - " + object.get("newfield");
                 //petWeightの値を格納
                 //weightData[i] = getObjScore[i];
                 //labelsdatesに日時を入れる
 
                 formerDate[i] = object.createDate.split("T", 1);
-                petsMemo[i] = object.newfield;
+                petsMemo[i] = object.dailyMemo;
 
 
                 //メモ欄に値を入れる
@@ -360,8 +368,15 @@ function getChartData()
                 var importObjectId = document.getElementById("objId_1_" + i);
                 //実際にテキストを入れる
                 importMemoDates.innerText = formerDate[i];
-                importMemoFields.innerText = petsMemo[i];
+                
                 importObjectId.innerText = object.objectId;
+
+                if(petsMemo[i] === undefined) {
+                    importMemoFields.innerText = "メモの内容が入ります。";
+                } else {
+                //PetProfileClassのpetSexの値を代入
+                importMemoFields.innerText = petsMemo[i];
+                }
 
 
               }
@@ -488,6 +503,7 @@ function drawChart()
         //$.mobile.changePage('#DetailPage');
 }
 
+
     //使い方ガイドのバー機能
     var  upSpeed= 20;  //メッセージのスライド速度
     var  delay = 4800; // 次のメッセージに切り替わるまでの静止時間
@@ -553,29 +569,34 @@ $(function(){
 
 //メモ更新機能に必要な動作。
 function startEditBtnJs(idNum_1, idNum_2) {
-  //スムーススクロール（画面のトップに移動）
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-  //var idDegug = document.getElementById("detailArea");
-  var memoId = document.getElementById("memodate_" + idNum_1 + "_" + idNum_2);
-  var memoFieldId = document.getElementById("memofield_" + idNum_1 + "_" + idNum_2);
-  var memoObjId = document.getElementById("objId_"+ idNum_1 + "_" + idNum_2);
-  //日にち取れているかDebug
-  //idDegug.innerText = memoId.innerText;
-  //モーダルウィンドウの要素に日にち，メモの内容を入れる
-  var modalDate = document.getElementById("modalMotal_p_01");
-  modalDate.innerText = memoId.innerText;
-  var modalMemo = document.getElementById("modalMotal_p_02");
-  modalMemo.innerText = memoFieldId.innerText;
-  var modalObjId = document.getElementById("chooseObjId");
-  modalObjId.innerText = memoObjId.innerText;
+  var memoObjIdChecker = document.getElementById("objId_"+ idNum_1 + "_" + idNum_2);
+  if (memoObjIdChecker.innerText == "DBのobjId") {
 
-  //メモ編集画面ポップアップの動作
-  $("#modalMotal").removeClass("hidden");
-  $("#maskMotal").removeClass("hidden");
-  $("#sendMotal").removeClass("hidden");
+  } else {
+    //スムーススクロール（画面のトップに移動）
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    //var idDegug = document.getElementById("detailArea");
+    var memoId = document.getElementById("memodate_" + idNum_1 + "_" + idNum_2);
+    var memoFieldId = document.getElementById("memofield_" + idNum_1 + "_" + idNum_2);
+    var memoObjId = document.getElementById("objId_"+ idNum_1 + "_" + idNum_2);
+    //日にち取れているかDebug
+    //idDegug.innerText = memoId.innerText;
+    //モーダルウィンドウの要素に日にち，メモの内容を入れる
+    var modalDate = document.getElementById("modalMotal_p_01");
+    modalDate.innerText = memoId.innerText;
+    var modalMemo = document.getElementById("modalMotal_p_02");
+    modalMemo.innerText = memoFieldId.innerText;
+    var modalObjId = document.getElementById("chooseObjId");
+    modalObjId.innerText = memoObjId.innerText;
+
+    //メモ編集画面ポップアップの動作
+    $("#modalMotal").removeClass("hidden");
+    $("#maskMotal").removeClass("hidden");
+    $("#sendMotal").removeClass("hidden");
+  }
 
 }
 
@@ -603,14 +624,14 @@ $(function(){
     //textareaの内容を変数に格納する
     const sendMemoText = document.getElementById("modalMotal_p_03").value;
     //DBへ送信する
-    var sendMemo = ncmb.DataStore("TestClass");
+    var sendMemo = ncmb.DataStore("PetRecordClass");
     sendMemo.equalTo("objectId", searchObjId.innerText)//objectIdで一発検索する
           .limit(1) //取ってくる値の数
           .fetchAll()
           //function(results)はJavaScriptの即時関数なのでequalToからcatchの;まで１つの動作
           .then(function(results){
               var object = results[0];
-              object.set("cheatMode", sendMemoText)
+              object.set("dailyMemo", sendMemoText)
                     .update()
                     //.save()
                     .then(function(result){
@@ -721,7 +742,7 @@ $(function(){
 
     $("#closeProfile").click();
   })
-  $("#profileReloadBtn").click(updateAppDisplay);//「プロフィール」クリックしたらペット情報再取得と表示更新
+  //ん？$("#profileReloadBtn").click(updateAppDisplay);//「プロフィール」クリックしたらペット情報再取得と表示更新
 });
 
 //実際の送信動作をする関数
@@ -765,6 +786,9 @@ function finalCheckSend(sendObjId, infoFlags, sendProDatas) {
                         document.getElementById("afSendMsg_p2").innerText = "もう一度お試しください";
                       });
                   });
+
+
+
 }
 
 //保存ボタン押下後に表示されるボタン動作
@@ -773,12 +797,14 @@ $(function(){
             $(".afterMotal").addClass("hide--afterSendMotal");//非表示にする
             var elm_main = document.getElementById("GraphMemoScreen");
             var elm_profile = document.getElementById("myPageScreen");
-            if(elm_main.classList.contains("hide--Screen") == true) {
-                updateAppDisplay();//プロフィールの更新
-            }
-
-            if(elm_profile.classList.contains("hide--Screen") == true) {
+            if(elm_main.classList.contains("hide--Screen") == false) {
                 getChartData();//グラフとメモの更新
+            } else {
+            }
+            
+            if(elm_profile.classList.contains("hide--Screen") == false) {
+                updateAppDisplay();//プロフィールの更新
+            } else {
             }
         })
 });
@@ -880,10 +906,12 @@ $(function(){
     $(".GraphMemo").addClass("hide--Screen");//非表示にする
     $(".ProfileMyPage").removeClass("hide--Screen");//表示できる
   })
+  $("#ProfileBtn").click(updateAppDisplay);//初回アクセス向けにプロフィールボタン押したらデータ取得しに行くようにしている
   $("#ManageBtn").click(function(){//イベントスタート
     $(".ProfileMyPage").addClass("hide--Screen");//非表示にする
     $(".GraphMemo").removeClass("hide--Screen");//表示できる
   })
+  $("#ManageBtn").click(getChartData);
 });
 
 
